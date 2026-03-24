@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Forza Color Converter – DxBang</title>
+	<style>
+		*, *::before, *::after {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		:root {
+			--bg: #0d1117;
+			--surface: #161b22;
+			--border: #30363d;
+			--accent: #58a6ff;
+			--accent-hover: #79c0ff;
+			--text: #c9d1d9;
+			--text-muted: #8b949e;
+			--success: #3fb950;
+			--error: #f85149;
+			--radius: 8px;
+		}
+
+		body {
+			background: var(--bg);
+			color: var(--text);
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+			min-height: 100vh;
+			display: flex;
+			flex-direction: column;
+		}
+
+		header {
+			border-bottom: 1px solid var(--border);
+			padding: 1.5rem 2rem;
+		}
+
+		header h1 {
+			font-size: 1.4rem;
+			font-weight: 600;
+			color: var(--text);
+		}
+
+		header h1 a {
+			color: var(--accent);
+			text-decoration: none;
+		}
+
+		header h1 a:hover {
+			color: var(--accent-hover);
+			text-decoration: underline;
+		}
+
+		header p {
+			color: var(--text-muted);
+			font-size: 0.9rem;
+			margin-top: 0.25rem;
+		}
+
+		main {
+			flex: 1;
+			max-width: 700px;
+			width: 100%;
+			margin: 0 auto;
+			padding: 2.5rem 2rem;
+			display: flex;
+			flex-direction: column;
+			gap: 1.5rem;
+		}
+
+		/* ── Input card ─────────────────────────────────────────── */
+		.card {
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-radius: var(--radius);
+			padding: 1.5rem;
+		}
+
+		.card-title {
+			font-size: 0.8rem;
+			font-weight: 600;
+			text-transform: uppercase;
+			letter-spacing: 0.08em;
+			color: var(--text-muted);
+			margin-bottom: 1rem;
+		}
+
+		.input-row {
+			display: flex;
+			gap: 0.75rem;
+			align-items: center;
+		}
+
+		input[type="color"] {
+			width: 3rem;
+			height: 2.5rem;
+			padding: 0.2rem;
+			border: 1px solid var(--border);
+			border-radius: var(--radius);
+			background: var(--bg);
+			cursor: pointer;
+			flex-shrink: 0;
+		}
+
+		input[type="text"] {
+			flex: 1;
+			padding: 0.6rem 0.85rem;
+			background: var(--bg);
+			border: 1px solid var(--border);
+			border-radius: var(--radius);
+			color: var(--text);
+			font-size: 0.9rem;
+			font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+			transition: border-color 0.15s ease;
+		}
+
+		input[type="text"]:focus {
+			outline: none;
+			border-color: var(--accent);
+		}
+
+		input[type="text"].error {
+			border-color: var(--error);
+		}
+
+		.error-msg {
+			margin-top: 0.5rem;
+			font-size: 0.8rem;
+			color: var(--error);
+			min-height: 1em;
+		}
+
+		/* ── Preview swatch ──────────────────────────────────────── */
+		.swatch-row {
+			display: flex;
+			align-items: center;
+			gap: 1rem;
+			margin-top: 1rem;
+		}
+
+		.swatch {
+			width: 3rem;
+			height: 3rem;
+			border-radius: var(--radius);
+			border: 1px solid var(--border);
+			background: #000;
+			flex-shrink: 0;
+			transition: background 0.1s ease;
+		}
+
+		.swatch-values {
+			font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+			font-size: 0.8rem;
+			color: var(--text-muted);
+			line-height: 1.6;
+		}
+
+		/* ── Output values ──────────────────────────────────────── */
+		.output-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr 1fr;
+			gap: 0.75rem;
+		}
+
+		@media (max-width: 480px) {
+			.output-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		.value-cell {
+			background: var(--bg);
+			border: 1px solid var(--border);
+			border-radius: var(--radius);
+			padding: 1rem;
+			display: flex;
+			flex-direction: column;
+			gap: 0.35rem;
+		}
+
+		.value-label {
+			font-size: 0.75rem;
+			color: var(--text-muted);
+			text-transform: uppercase;
+			letter-spacing: 0.06em;
+		}
+
+		.value-number {
+			font-size: 2rem;
+			font-weight: 700;
+			font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+			color: var(--text);
+			line-height: 1;
+		}
+
+		.value-range {
+			font-size: 0.7rem;
+			color: var(--text-muted);
+		}
+
+		.copy-btn {
+			margin-top: 0.5rem;
+			padding: 0.3rem 0.6rem;
+			background: #21262d;
+			border: 1px solid var(--border);
+			border-radius: var(--radius);
+			color: var(--text-muted);
+			font-size: 0.75rem;
+			cursor: pointer;
+			transition: border-color 0.15s ease, color 0.15s ease;
+			width: fit-content;
+		}
+
+		.copy-btn:hover {
+			border-color: var(--accent);
+			color: var(--accent);
+		}
+
+		.copy-btn.copied {
+			border-color: var(--success);
+			color: var(--success);
+		}
+
+		/* ── Copy-all button ────────────────────────────────────── */
+		.copy-all-row {
+			display: flex;
+			justify-content: flex-end;
+		}
+
+		.copy-all-btn {
+			padding: 0.5rem 1rem;
+			background: #21262d;
+			border: 1px solid var(--border);
+			border-radius: var(--radius);
+			color: var(--text);
+			font-size: 0.85rem;
+			cursor: pointer;
+			transition: border-color 0.15s ease, color 0.15s ease;
+		}
+
+		.copy-all-btn:hover {
+			border-color: var(--accent);
+			color: var(--accent);
+		}
+
+		.copy-all-btn.copied {
+			border-color: var(--success);
+			color: var(--success);
+		}
+
+		/* ── Info note ───────────────────────────────────────────── */
+		.info-note {
+			font-size: 0.8rem;
+			color: var(--text-muted);
+			line-height: 1.6;
+			padding: 0.75rem 1rem;
+			border-left: 3px solid var(--border);
+			background: var(--surface);
+			border-radius: 0 var(--radius) var(--radius) 0;
+		}
+
+		/* ── Footer ──────────────────────────────────────────────── */
+		footer {
+			border-top: 1px solid var(--border);
+			padding: 1.25rem 2rem;
+			text-align: center;
+			font-size: 0.8rem;
+			color: var(--text-muted);
+		}
+
+		footer a {
+			color: var(--accent);
+			text-decoration: none;
+		}
+
+		footer a:hover {
+			text-decoration: underline;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<h1><a href="/">DxBang</a> / <span>forza-color</span></h1>
+		<p>Convert any color into the paint values used in Forza Motorsport &amp; Forza Horizon.</p>
+	</header>
+
+	<main>
+		<!-- Input card -->
+		<div class="card">
+			<p class="card-title">Color Input</p>
+			<div class="input-row">
+				<input type="color" id="colorPicker" value="#ff0000" aria-label="Color picker">
+				<input type="text" id="colorText" value="#ff0000" spellcheck="false" autocomplete="off"
+					placeholder="#rrggbb · rgb(r,g,b) · hsl(h,s%,l%) · red">
+			</div>
+			<p class="error-msg" id="errorMsg" aria-live="polite"></p>
+			<div class="swatch-row">
+				<div class="swatch" id="swatch"></div>
+				<div class="swatch-values" id="swatchValues"></div>
+			</div>
+		</div>
+
+		<!-- Output card -->
+		<div class="card">
+			<p class="card-title">Forza Paint Values (0 – 255)</p>
+			<div class="output-grid">
+				<div class="value-cell">
+					<span class="value-label">Hue</span>
+					<span class="value-number" id="forzaH">–</span>
+					<span class="value-range">0 – 255</span>
+					<button class="copy-btn" id="copyH" aria-label="Copy Hue value">Copy H</button>
+				</div>
+				<div class="value-cell">
+					<span class="value-label">Saturation</span>
+					<span class="value-number" id="forzaS">–</span>
+					<span class="value-range">0 – 255</span>
+					<button class="copy-btn" id="copyS" aria-label="Copy Saturation value">Copy S</button>
+				</div>
+				<div class="value-cell">
+					<span class="value-label">Luminosity</span>
+					<span class="value-number" id="forzaL">–</span>
+					<span class="value-range">0 – 255</span>
+					<button class="copy-btn" id="copyL" aria-label="Copy Luminosity value">Copy L</button>
+				</div>
+			</div>
+			<div class="copy-all-row" style="margin-top:0.75rem;">
+				<button class="copy-all-btn" id="copyAll">Copy H, S, L</button>
+			</div>
+		</div>
+
+		<p class="info-note">
+			Forza Motorsport and Forza Horizon store paint colors as <strong>H&nbsp;S&nbsp;L</strong> values
+			each ranging from <strong>0&nbsp;to&nbsp;255</strong>, mapped from the standard HSL color model
+			(Hue&nbsp;0–360°, Saturation&nbsp;0–100%, Lightness&nbsp;0–100%).
+		</p>
+	</main>
+
+	<footer>
+		<p>&copy; <span id="year"></span> <a href="https://github.com/DxBang" target="_blank" rel="noopener">DxBang</a>. Hosted on GitHub Pages.</p>
+	</footer>
+
+	<script>
+		// ── Color parsing via canvas ──────────────────────────────────────────────
+		function parseColor(input) {
+			const canvas = document.createElement('canvas');
+			canvas.width = 1;
+			canvas.height = 1;
+			const ctx = canvas.getContext('2d');
+			ctx.fillStyle = input.trim();
+			ctx.fillRect(0, 0, 1, 1);
+			const d = ctx.getImageData(0, 0, 1, 1).data;
+			return { r: d[0], g: d[1], b: d[2] };
+		}
+
+		// Validate that the browser actually parsed the color (not defaulted to black
+		// for an invalid string – but "black" itself is valid, so we cross-check).
+		function isValidColor(input) {
+			const s = input.trim();
+			if (!s) return false;
+			const canvas = document.createElement('canvas');
+			canvas.width = 1;
+			canvas.height = 1;
+			const ctx = canvas.getContext('2d');
+			// Set a known sentinel value, then attempt to apply the user's color.
+			// If parsing fails the browser leaves fillStyle unchanged (the sentinel).
+			const SENTINEL = '#123456';
+			ctx.fillStyle = SENTINEL;
+			ctx.fillStyle = s;
+			return ctx.fillStyle !== SENTINEL || s === SENTINEL;
+		}
+
+		// ── RGB → HSL conversion ──────────────────────────────────────────────────
+		function rgbToHSL(r, g, b) {
+			r /= 255; g /= 255; b /= 255;
+			const max = Math.max(r, g, b);
+			const min = Math.min(r, g, b);
+			const d = max - min;
+			let h = 0, s = 0;
+			const l = (max + min) / 2;
+
+			if (d !== 0) {
+				s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+				switch (max) {
+					case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+					case g: h = ((b - r) / d + 2) / 6; break;
+					case b: h = ((r - g) / d + 4) / 6; break;
+				}
+			}
+			return { h, s, l }; // each in [0, 1]
+		}
+
+		// ── Convert to Forza 0-255 scale ──────────────────────────────────────────
+		function toForza(r, g, b) {
+			const { h, s, l } = rgbToHSL(r, g, b);
+			return {
+				h: Math.round(h * 255),
+				s: Math.round(s * 255),
+				l: Math.round(l * 255),
+			};
+		}
+
+		// ── UI helpers ────────────────────────────────────────────────────────────
+		function toHex(r, g, b) {
+			return '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('');
+		}
+
+		function flashCopied(btn) {
+			btn.classList.add('copied');
+			const original = btn.textContent;
+			btn.textContent = 'Copied!';
+			setTimeout(() => {
+				btn.classList.remove('copied');
+				btn.textContent = original;
+			}, 1500);
+		}
+
+		function copyText(text, btn) {
+			navigator.clipboard.writeText(String(text)).then(() => flashCopied(btn));
+		}
+
+		// ── Main update function ──────────────────────────────────────────────────
+		const picker   = document.getElementById('colorPicker');
+		const textIn   = document.getElementById('colorText');
+		const errorMsg = document.getElementById('errorMsg');
+		const swatch   = document.getElementById('swatch');
+		const swatchValues = document.getElementById('swatchValues');
+		const forzaH   = document.getElementById('forzaH');
+		const forzaS   = document.getElementById('forzaS');
+		const forzaL   = document.getElementById('forzaL');
+		const copyH    = document.getElementById('copyH');
+		const copyS    = document.getElementById('copyS');
+		const copyL    = document.getElementById('copyL');
+		const copyAll  = document.getElementById('copyAll');
+
+		let currentH = 0, currentS = 0, currentL = 0;
+
+		function update(colorInput, syncPicker) {
+			if (!isValidColor(colorInput)) {
+				textIn.classList.add('error');
+				errorMsg.textContent = 'Unrecognized color – try #rrggbb, rgb(r,g,b), or a CSS color name.';
+				return;
+			}
+			textIn.classList.remove('error');
+			errorMsg.textContent = '';
+
+			const { r, g, b } = parseColor(colorInput);
+			const forza = toForza(r, g, b);
+			currentH = forza.h;
+			currentS = forza.s;
+			currentL = forza.l;
+
+			const hex = toHex(r, g, b);
+			const { h, s, l } = rgbToHSL(r, g, b);
+
+			// Update swatch
+			swatch.style.background = hex;
+			swatchValues.innerHTML =
+				`RGB: ${r}, ${g}, ${b}<br>` +
+				`HSL: ${Math.round(h * 360)}°, ${Math.round(s * 100)}%, ${Math.round(l * 100)}%<br>` +
+				`Hex: ${hex.toUpperCase()}`;
+
+			// Update output values
+			forzaH.textContent = currentH;
+			forzaS.textContent = currentS;
+			forzaL.textContent = currentL;
+
+			// Sync color picker when input comes from the text field
+			if (syncPicker) {
+				picker.value = hex;
+			}
+		}
+
+		// ── Event listeners ───────────────────────────────────────────────────────
+		picker.addEventListener('input', () => {
+			textIn.value = picker.value.toUpperCase();
+			update(picker.value, false);
+		});
+
+		textIn.addEventListener('input', () => {
+			update(textIn.value, true);
+		});
+
+		copyH.addEventListener('click', () => copyText(currentH, copyH));
+		copyS.addEventListener('click', () => copyText(currentS, copyS));
+		copyL.addEventListener('click', () => copyText(currentL, copyL));
+		copyAll.addEventListener('click', () => copyText(`${currentH} ${currentS} ${currentL}`, copyAll));
+
+		// ── Init ──────────────────────────────────────────────────────────────────
+		document.getElementById('year').textContent = new Date().getFullYear();
+		update(picker.value, false);
+	</script>
+</body>
+</html>
