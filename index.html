@@ -1,178 +1,438 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>DxBang – Static Projects</title>
-	<style>
-		*, *::before, *::after {
-			box-sizing: border-box;
-			margin: 0;
-			padding: 0;
-		}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DxBang – Static Projects</title>
+<style>
+*, *::before, *::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
 
-		:root {
-			--bg: #0d1117;
-			--surface: #161b22;
-			--border: #30363d;
-			--accent: #58a6ff;
-			--accent-hover: #79c0ff;
-			--text: #c9d1d9;
-			--text-muted: #8b949e;
-			--radius: 8px;
-		}
+html,
+body,
+textarea,
+select,
+div {
+	scrollbar-width: thin;
+	scrollbar-gutter: stable;
+}
 
-		body {
-			background: var(--bg);
-			color: var(--text);
-			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-			min-height: 100vh;
-			display: flex;
-			flex-direction: column;
-		}
+:root {
+	color-scheme: dark;
+	scrollbar-color: oklch(0.6 0.2 220) oklch(0.2 0 0);
+	--bg: oklch(0.2 0 0);
+	--card-back: oklch(0.25 0 0);
+	--card-back-hover: oklch(0.3 0 0);
+	--card-front: oklch(0.3 0 0);
+	--card-front-hover: oklch(0.35 0 0);
+	--border: oklch(0.3 0 0);
+	--accent: oklch(0.6 0.2 220);
+	--accent-hover: oklch(0.7 0.2 220);
+	--text: oklch(0.9 0 0);
+	--text-muted: oklch(0.7 0 0);
+	--radius: 1rem;
+	--bounce: cubic-bezier(0.68, -0.55, 0.27, 1.55);
+	--snap: cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-		header {
-			border-bottom: 1px solid var(--border);
-			padding: 1.5rem 2rem;
-			display: flex;
-			align-items: center;
-			gap: 1rem;
-		}
 
-		header h1 {
-			font-size: 1.4rem;
+body {
+	background: var(--bg);
+	color: var(--text);
+	font-family: system-ui, sans-serif;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	font-size: clamp(0.9rem, 1vw, 1.1rem);
+	>header,
+	>main,
+	>footer {
+		width: 100%;
+		max-width: 90rem;
+		margin: 0 auto;
+		padding: 1.5rem 2rem;
+	}
+	>header {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		border-bottom: 1px solid var(--border);
+		h1 {
 			font-weight: 600;
 			color: var(--text);
+			span {
+				color: var(--accent);
+			}
 		}
-
-		header h1 span {
-			color: var(--accent);
-		}
-
-		header p {
+		p {
 			color: var(--text-muted);
 			font-size: 0.9rem;
 		}
+	}
+	>main {
+		flex: 1;
+		max-width: 80rem;
+	}
+	>footer {
+		border-top: 1px solid var(--border);
+		text-align: center;
+		font-size: 0.8rem;
+		color: var(--text-muted);
+	}
+}
+a {
+	color: var(--accent);
+	text-decoration: none;
+	&:hover {
+		color: var(--accent-hover);
+	}
+}
+h1, h2, h3 {
+	font-weight: 600;
+	color: var(--text);
+	letter-spacing: 0.25rem;
+	margin: .5rem 0 0.25rem;
+	padding: 0;
+}
+h1 { font-size: 3rem; }
+h2 { font-size: 2.5rem; }
+h3 { font-size: 2rem; }
 
-		main {
-			flex: 1;
-			max-width: 1100px;
+ul.cards,
+ul.tags {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+ul.cards {
+	display: grid;
+	position: relative;
+	grid-template-columns: repeat(
+		auto-fill,
+		minmax(
+			15rem,
+			1fr
+		)
+	);
+	align-items: stretch;
+	>li {
+		aspect-ratio: 63 / 88;
+		z-index: 0;
+		&.forced {
+			.card {
+				transform: rotateY(180deg);
+				scale: 1.2;
+			}
+		}
+		>a {
+			display: block;
 			width: 100%;
-			margin: 0 auto;
-			padding: 2.5rem 2rem;
+			height: 100%;
+			position: relative;
+			z-index: 1;
+			overflow: visible;
+			perspective: 800px;
+			&:hover .card,
+			&:focus-within .card {
+				transform: rotateY(180deg);
+				scale: 1.1;
+				box-shadow: 0px 10px 20px -5px #000;
+			}
+			>.card {
+				transform-style: preserve-3d;
+				transform: rotateY(0deg);
+				scale: 0.9;
+				transform-origin: center;
+				position: absolute;
+				inset: 0;
+				display: flex;
+				flex-direction: column;
+				transition:
+					transform .5s var(--bounce) .1s,
+					scale .7s var(--snap),
+					box-shadow .5s ease;
+				>.back,
+				>.face {
+					backface-visibility: hidden;
+					position: absolute;
+					inset: 0;
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					justify-content: center;
+					text-align: center;
+					padding: 1rem;
+					border-radius: var(--radius);
+					corner-shape: squircle;
+					overflow: clip;
+					border: 2px solid var(--border);
+				}
+				>.back {
+					background: var(--card-back);
+					transform: rotateY(0deg);
+					>.name {
+						font-size: 4rem;
+						font-weight: 700;
+						color: var(--accent);
+						z-index: 2;
+					}
+					>.glyphs {
+						z-index: 0;
+					}
+				}
+				>.face {
+					background: var(--card-front);
+					transform: rotateY(180deg);
+					>.name {
+						font-weight: 600;
+						color: var(--accent);
+						flex: 1 1 auto;
+						display: flex;
+						align-items: flex-end;
+						justify-content: center;
+					}
+					>.desc {
+						color: var(--text-muted);
+						line-height: 1.5;
+						flex: 0 0 50%;
+						width: 100%;
+						text-align: left;
+						background: var(--card-back);
+						margin-top: 1rem;
+						padding: 0.75rem;
+						border-radius: var(--radius);
+						border: 1px solid var(--border);
+						corner-shape: squircle;
+					}
+					>.tags {
+						margin: 0.5rem 0;
+						flex: 0 0 1.5rem;
+						width: 100%;
+						height: 1.5rem;
+					}
+				}
+			}
 		}
+	}
+}
+.glyphs {
+	position: absolute;
+	inset: 0;
+	overflow: clip;
+	.glyph {
+		position: absolute;
+		font-size: 20em;
+		font-weight: 700;
+		color: var(--bg);
+		line-height: 0.75;
+		inset: auto;
+	}
+	&.a1 {
+		.l1 {
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+	}
+	&.a2 {
+		.l1 { 
+			top: -10%;
+			left: -10%;
+		}
+		.l2 { 
+			bottom: -10%;
+			right: -10%;
+		}
+	}
+	&.a3 {
+		.l1 {
+			top: 10%; 
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+		.l2 { bottom: -10%; left: 0; }
+		.l3 { bottom: -10%; right: -10%; }
+	}
+	&.a4 {
+		.l1 { 
+			top: -10%;
+			left: -10%;
+		}
+		.l2 { 
+			top: -10%;
+			right: -10%;
+		}
+		.l3 { 
+			bottom: -10%;
+			left: -10%;
+		}
+		.l4 { 
+			bottom: -10%;
+			right: -10%;
+		}
+	}
+}
 
-		.section-title {
-			font-size: 1rem;
-			font-weight: 600;
-			color: var(--text-muted);
-			text-transform: uppercase;
-			letter-spacing: 0.08em;
-			margin-bottom: 1.25rem;
-		}
-
-		.projects {
-			display: grid;
-			grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-			gap: 1rem;
-		}
-
-		.card {
-			background: var(--surface);
-			border: 1px solid var(--border);
-			border-radius: var(--radius);
-			padding: 1.25rem 1.5rem;
-			display: flex;
-			flex-direction: column;
-			gap: 0.6rem;
-			text-decoration: none;
-			color: inherit;
-			transition: border-color 0.15s ease, background 0.15s ease;
-		}
-
-		.card:hover {
-			border-color: var(--accent);
-			background: #1c2128;
-		}
-
-		.card-name {
-			font-size: 1rem;
-			font-weight: 600;
-			color: var(--accent);
-		}
-
-		.card:hover .card-name {
-			color: var(--accent-hover);
-		}
-
-		.card-desc {
-			font-size: 0.875rem;
-			color: var(--text-muted);
-			line-height: 1.5;
-			flex: 1;
-		}
-
-		.card-tag {
-			display: inline-block;
-			font-size: 0.75rem;
-			color: var(--text-muted);
-			background: #21262d;
-			border: 1px solid var(--border);
-			border-radius: 2em;
-			padding: 0.15em 0.65em;
-			width: fit-content;
-		}
-
-		footer {
-			border-top: 1px solid var(--border);
-			padding: 1.25rem 2rem;
-			text-align: center;
-			font-size: 0.8rem;
-			color: var(--text-muted);
-		}
-
-		footer a {
-			color: var(--accent);
-			text-decoration: none;
-		}
-
-		footer a:hover {
-			text-decoration: underline;
-		}
-	</style>
+ul.tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	li {
+		display: inline-block;
+		font-size: 0.75rem;
+		color: var(--text-muted);
+		background: #21262d;
+		border: 1px solid var(--border);
+		border-radius: 2em;
+		padding: 0.15em 0.65em;
+		width: fit-content;
+	}
+}
+</style>
 </head>
 <body>
-	<header>
-		<div>
-			<h1><span>DxBang</span> / projects</h1>
-			<p>A collection of static projects hosted on GitHub Pages.</p>
-		</div>
-	</header>
+<header>
+<div>
+	<h1><span>DxBang</span> / projects</h1>
+	<p>A collection of my projects, experiments, and various endeavors across different fields. This is a static showcase of my work, with links to live demos, source code, and more details about each project.</p>
+</div>
+</header>
 
-	<main>
-		<p class="section-title">Projects</p>
-		<div class="projects">
-			<!-- Add project cards here.
-			     Example:
-			<a class="card" href="/project-name/">
-				<span class="card-name">project-name</span>
-				<span class="card-desc">Short description of the project.</span>
-				<span class="card-tag">html</span>
-			</a>
-			-->
-			<a class="card" href="https://github.com/DxBang" target="_blank" rel="noopener">
-				<span class="card-name">GitHub Profile</span>
-				<span class="card-desc">Browse all repositories and source code on GitHub.</span>
-				<span class="card-tag">github</span>
-			</a>
-		</div>
-	</main>
+<template id="card-template">
+	<li>
+		<a href="https://github.com/DxBang" target="_blank" rel="noopener">
+			<div class="card">
+				<div class="back">
+					<h3 class="name"></h3>
+					<div class="glyphs"></div>
+				</div>
+				<div class="face">
+					<h3 class="name"></h3>
+					<div class="desc"></div>
+					<ul class="tags"></ul>
+				</div>
+			</div>
+		</a>
+	</li>
+</template>
 
-	<footer>
-		<p>&copy; <span id="year"></span> <a href="https://github.com/DxBang" target="_blank" rel="noopener">DxBang</a>. Hosted on GitHub Pages.</p>
-	</footer>
-	<script>
-		document.getElementById('year').textContent = new Date().getFullYear();
-	</script>
+<template id="tag-template">
+	<li></li>
+</template>
+
+<template id="glyph-template">
+	<span class="glyph"></span>
+</template>
+
+<template id="data-template">
+	<article id="">
+		<h2 class="title"></h2>
+		<ul class="cards"></ul>
+	</article>
+</template>
+
+<main>
+	<section id="data-links">
+	</section>
+</main>
+
+<footer>
+	<p>&copy;<span id="year"></span> <a href="https://github.com/DxBang" target="_blank" rel="noopener">DxBang</a>. Hosted on GitHub Pages.</p>
+</footer>
+<script>
+"use strict";
+document.getElementById('year').textContent = new Date().getFullYear();
+
+const
+	cardTemplate = document.getElementById('card-template'),
+	tagTemplate = document.getElementById('tag-template'),
+	glyphTemplate = document.getElementById('glyph-template'),
+	dataTemplate = document.getElementById('data-template'),
+	dataLinks = document.getElementById('data-links');
+
+const addCardsToElement = (element, items) => {
+	items.forEach(item => {
+		const _card = cardTemplate.content.cloneNode(true);
+		_card.querySelector('li').classList.add(...(item.class || []));
+		_card.querySelector('a').href = item.link || '#';
+		_card.querySelectorAll('.name').forEach(el => {
+			el.textContent = item.name;
+		});
+		_card.querySelector('.desc').textContent = item.desc || '';
+
+		const _glyphs = _card.querySelector('.glyphs');
+		if (_glyphs && Array.isArray(item.glyphs) && item.glyphs.length) {
+			_glyphs.classList.add(`a${item.glyphs.length}`);
+			item.glyphs.forEach((glyph, idx) => {
+				const
+					_glyph = glyphTemplate.content.cloneNode(true),
+					_span = _glyph.querySelector('span');
+				_span.textContent = glyph;
+				_span.classList.add(`l${idx + 1}`);
+				_glyphs.append(_glyph);
+			});
+		}
+
+		const _tags = _card.querySelector('.tags');
+		if (_tags && Array.isArray(item.tags) && item.tags.length) {
+			item.tags.forEach(tag => {
+				const
+					_tag = tagTemplate.content.cloneNode(true),
+					_li = _tag.querySelector('li');
+				_li.textContent = tag;
+				_li.classList.add(`${tag.toLowerCase().replace(/\s+/g, '-')}`);
+				_tags.append(_tag);
+			});
+		}
+
+		element.append(_card);
+	});
+};
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+	fetch('data.json')
+		.then(response => response.json())
+		.then(data => {
+
+			if (!dataLinks || !dataTemplate || !data || typeof data !== 'object') {
+				return;
+			}
+
+			Object.entries(data).forEach(([key, items]) => {
+				if (!Array.isArray(items)) {
+					return;
+				}
+
+				const
+					_section = dataTemplate.content.cloneNode(true),
+					_article = _section.querySelector('article'),
+					_title = _section.querySelector('.title'),
+					_cards = _section.querySelector('.cards');
+
+				if (_article) {
+					_article.id = key.replace(/\s+/g, '-').toLowerCase();
+				}
+				if (_title) {
+					_title.textContent = key;
+				}
+				if (_cards) {
+					addCardsToElement(_cards, items);
+				}
+
+				dataLinks.append(_section);
+			});
+
+		})
+		.catch(error => console.error('Error loading data:', error));
+});
+
+
+</script>
 </body>
 </html>

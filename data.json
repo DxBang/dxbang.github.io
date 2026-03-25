@@ -1,0 +1,106 @@
+{
+	"static github": [
+		{
+			"name": "Forza Color Converter",
+			"desc": "A tool to convert colors for Forza games.",
+			"tags": ["forza", "color", "converter"],
+			"link": "https://dxbang.github.io/forza-colors/",
+			"glyphs": ["F", "C", "C"],
+			"class": []
+		}
+	],
+	"hardware projects": [
+		{
+			"name": "Button Box Evolution",
+			"desc": "A custom-built button box for sim racing, featuring an array of buttons, switches, and rotary encoders for an immersive racing experience.",
+			"tags": ["sim racing", "hardware", "button box"],
+			"link": "https://bang.systems/project/buttonbox/evolution",
+			"glyphs": ["B", "B", "E"],
+			"class": []
+		}
+	],
+	"web projects": [
+		{
+			"name": "Bang Systems",
+			"desc": "My personal projects and experiments.",
+			"tags": ["bang", "systems", "php", "mysql"],
+			"link": "https://bang.systems",
+			"glyphs": ["B", "A", "N", "G"],
+			"class": []
+		},
+		{
+			"name": "Danish eMotorsport Series",
+			"desc": "The official website for the Danish eMotorsport Series, a competitive sim racing league.",
+			"tags": ["dems", "sim racing", "league"],
+			"link": "https://dems.bang.systems",
+			"glyphs": ["D", "E", "M", "S"],
+			"class": []
+		},
+		{
+			"name": "Fuel/Stint Calculator",
+			"desc": "A tool to calculate fuel requirements and stint strategies for sim racing sessions, based on track, car, and session parameters.",
+			"tags": ["fuel", "stint", "calculator"],
+			"link": "https://dems.bang.systems/tool/fuel",
+			"glyphs": ["F", "C"],
+			"class": []
+		},
+		{
+			"name": "GitHub",
+			"desc": "Browse all repositories and source code on GitHub.",
+			"tags": ["github"],
+			"link": "https://github.com/DxBang",
+			"glyphs": ["G", "H"],
+			"class": []
+		},
+		{
+			"name": "Debug API",
+			"desc": "A simple API for testing and debugging purposes.",
+			"tags": ["api", "debug"],
+			"link": "https://debug.bang.systems",
+			"glyphs": ["D", "A"],
+			"class": []
+		},
+		{
+			"name": "Color Tools",
+			"desc": "A collection of tools for working with colors, including converters and generators.",
+			"tags": ["color", "tools"],
+			"link": "https://bang.systems/project/colors",
+			"glyphs": ["C", "T"],
+			"class": []
+		},
+		{
+			"name": "BangBot",
+			"desc": "A Discord bot for managing and moderating servers, with a variety of features and commands specialized for Assetto Corsa Competizione communities.",
+			"tags": ["discord", "bot"],
+			"link": "https://bang.systems/project/bot/bangbot",
+			"glyphs": ["B", "B"],
+			"class": []
+		}
+	],
+	"social networks": [
+		{
+			"name": "X",
+			"desc": "Mostly just posting random thoughts and updates about my projects.",
+			"tags": ["x", "social", "twitter"],
+			"link": "https://x.com/DxBang3D",
+			"glyphs": ["X"],
+			"class": []
+		},
+		{
+			"name": "LinkedIn",
+			"desc": "Connect with me on LinkedIn for professional updates and networking.",
+			"tags": ["linkedin", "professional", "networking"],
+			"link": "https://www.linkedin.com/in/dxbang/",
+			"glyphs": ["L", "I"],
+			"class": []
+		},
+		{
+			"name": "YouTube",
+			"desc": "Connect with me on YouTube for video content and updates.",
+			"tags": ["youtube", "video", "updates"],
+			"link": "https://www.youtube.com/@DxBang3D",
+			"glyphs": ["Y", "T"],
+			"class": []
+		}
+	]
+}
