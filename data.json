@@ -1,24 +1,4 @@
 {
-	"static github": [
-		{
-			"name": "Forza Color Converter",
-			"desc": "A tool to convert colors for Forza games.",
-			"tags": ["forza", "color", "converter"],
-			"link": "https://dxbang.github.io/forza-colors/",
-			"glyphs": ["F", "C", "C"],
-			"class": []
-		}
-	],
-	"hardware projects": [
-		{
-			"name": "Button Box Evolution",
-			"desc": "A custom-built button box for sim racing, featuring an array of buttons, switches, and rotary encoders for an immersive racing experience.",
-			"tags": ["sim racing", "hardware", "button box"],
-			"link": "https://bang.systems/project/buttonbox/evolution",
-			"glyphs": ["B", "B", "E"],
-			"class": []
-		}
-	],
 	"web projects": [
 		{
 			"name": "Bang Systems",
@@ -74,6 +54,42 @@
 			"tags": ["discord", "bot"],
 			"link": "https://bang.systems/project/bot/bangbot",
 			"glyphs": ["B", "B"],
+			"class": []
+		},
+		{
+			"name": "Intact Denmark",
+			"desc": "An organization advocating for genital autonomy and the rights of individuals in Denmark.",
+			"tags": ["intact", "denmark", "genital autonomy"],
+			"link": "https://intactdenmark.dk",
+			"glyphs": ["I", "D"],
+			"class": []
+		},
+		{
+			"name": "Sekukær",
+			"desc": "A secular organization promoting critical thinking and scientific inquiry.",
+			"tags": ["secular", "organization", "science"],
+			"link": "https://sekukaer.dk",
+			"glyphs": ["S"],
+			"class": []
+		}
+	],
+	"static github": [
+		{
+			"name": "Forza Color Converter",
+			"desc": "A tool to convert colors for Forza games.",
+			"tags": ["forza", "color", "converter"],
+			"link": "https://dxbang.github.io/forza-colors/",
+			"glyphs": ["F", "C", "C"],
+			"class": []
+		}
+	],
+	"hardware projects": [
+		{
+			"name": "Button Box Evolution",
+			"desc": "A custom-built button box for sim racing, featuring an array of buttons, switches, and rotary encoders for an immersive racing experience.",
+			"tags": ["sim racing", "hardware", "button box"],
+			"link": "https://bang.systems/project/buttonbox/evolution",
+			"glyphs": ["B", "B", "E"],
 			"class": []
 		}
 	],
